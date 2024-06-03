@@ -7,16 +7,20 @@
 
     const menuItems = ref([
         {
-            name: 'Movies'
+            name: 'Movies',
+            url: '#/movies'
         },
         {
-            name: 'TV Shows'
+            name: 'TV Shows',
+            url: '#/tvshows'
         },
         {
-            name: 'People'
+            name: 'People',
+            url: '#/movies'
         },
         {
-            name: 'More'
+            name: 'More',
+            url: '#/tvshows'
         }
     ]);
 
@@ -28,7 +32,12 @@
         <div class="header-left flex gap-5 items-center justify-center w-6/12 h-full">
             <img class="img h-5" :src="headerIconURL"/>
             <ul class="menu-item-wrapper" v-for="item in menuItems">
-                <li class="menu-item text-base font-bold cursor-pointer">{{ item.name }}</li>
+                <a
+                    class="menu-item text-base font-bold cursor-pointer"
+                    :href="item.url"
+                >
+                    {{ item.name }}
+                </a>
             </ul>
         </div>
         <div class="header-right w-5/12 h-full"></div>

@@ -1,10 +1,36 @@
 <script setup>
+    import { ref, watch } from 'vue'
+    import { getMovies } from '../../functions/fetchData.js'
+    import MoviePoster from '../Content/MoviePoster.vue'
+
     const { welcomeText, welcomeSubText, searchBarInputPlaceholder, searchButtonText } = {
         welcomeText: 'Welcome.',
         welcomeSubText: 'Millions of movies, TV shows and people to discover. Explore now.',
         searchBarInputPlaceholder: 'Search for a movie, tv show, person...',
         searchButtonText: 'Search',
     };
+
+    const currentPath = ref(window.location.hash)
+    const loading = ref(false)
+    const movies = ref(null)
+    const error = ref(null)
+
+    window.addEventListener('hashchange', () => currentPath.value = window.location.hash)
+
+    watch(() => (currentPath.value.slice(1) ?? '/').replace('/', ''), fetchData, { immediate: true })
+
+    async function fetchData (hash) {
+        error.value = movies.value = null
+        loading.value = true
+
+        try {
+            movies.value = await getMovies(hash)
+        } catch (err) {
+            error.value = err.toString()
+        } finally {
+            loading.value = false
+        }
+    }
 </script>
 
 <template>
@@ -19,4 +45,7 @@
         </div>
     </div>
     <div class="oscar-wrapper"></div>
+    <div class="posters-wrapper flex max-w-[1280px] m-auto mt-[50px] overflow-x-scroll gap-5 bg-no-repeat bg-bottom bg-[url('https://www.themoviedb.org/assets/2/v4/misc/trending-bg-39afc2a5f77e31d469b25c187814c0a2efef225494c038098d62317d923f8415.svg')]">
+        <MoviePoster v-for="poster in movies?.results" :key="poster.id" :poster="poster"/>
+    </div>
 </template>
