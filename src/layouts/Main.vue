@@ -4,7 +4,7 @@
 </script>
 
 <template>
-    <div class="bg-white w-screen h-screen">
+    <div class="bg-white w-screen min-h-screen">
         <Header />
         <Content />
     </div>
