@@ -14,19 +14,21 @@
     const loading = ref(false);
     const movies = ref(null);
     const error = ref(null);
-    const algorightm = ref('popular');
-    const algorightmOptionBackgroundColor = ref('#032541');
+    const algorithm = ref('popular');
+    const popularButtonActive = ref(true);
+    const topRatedButtonActive = ref(false);
 
     window.addEventListener('hashchange', () => currentPath.value = window.location.hash);
 
     watch(() => (currentPath.value.slice(1) ?? '/').replace('/', ''), fetchData, { immediate: true });
+    watch(() => algorithm.value, fetchData, { immediate: true });
 
-    async function fetchData (hash) {
+    async function fetchData (algorithm) {
         error.value = movies.value = null;
         loading.value = true;
 
         try {
-            movies.value = await getMovies(hash);
+            movies.value = await getMovies(algorithm);
         } catch (err) {
             error.value = err.toString();
         } finally {
@@ -35,8 +37,9 @@
     }
 
     function setSelectedAlgorithm (event) {
-        const algorightm = 
-        console.log(event.target.innerText)
+        algorithm.value = event.target.innerText;
+        popularButtonActive.value = algorithm.value === 'popular';
+        topRatedButtonActive.value = algorithm.value === 'top rated';
     }
 </script>
 
@@ -55,8 +58,8 @@
     <div class="posters-algorithm-wrapper flex max-w-[1280px] m-auto text-black p-[10px] gap-[20px] items-center">
         <div class="posters-algorithm-text text-[24px] font-bold">Popular</div>
         <div class="poster-algorihtm-options flex gap-[10px]">
-            <div @click="setSelectedAlgorithm" :style="{backgroundColor: algorightmOptionBackgroundColor}" class="poster-algorithm-option pt-[4px] pb-[4px] pl-[15px] pr-[15px] rounded-2xl">popular</div>
-            <div @click="setSelectedAlgorithm" :style="{backgroundColor: algorightmOptionBackgroundColor}" class="poster-algorithm-option pt-[4px] pb-[4px] pl-[15px] pr-[15px] rounded-2xl">top rated</div>
+            <div @click="setSelectedAlgorithm" :class="{ 'active': popularButtonActive }" class="poster-algorithm-option pt-[4px] pb-[4px] pl-[15px] pr-[15px] rounded-2xl text-black bg-white border border-black hover:cursor-pointer">popular</div>
+            <div @click="setSelectedAlgorithm" :class="{ 'active': topRatedButtonActive }" class="poster-algorithm-option pt-[4px] pb-[4px] pl-[15px] pr-[15px] rounded-2xl text-black bg-white border border-black hover:cursor-pointer">top rated</div>
         </div>
     </div>
     <div class="posters-wrapper flex max-w-[1280px] m-auto overflow-x-scroll gap-5 bg-no-repeat bg-bottom bg-[url('https://www.themoviedb.org/assets/2/v4/misc/trending-bg-39afc2a5f77e31d469b25c187814c0a2efef225494c038098d62317d923f8415.svg')]">

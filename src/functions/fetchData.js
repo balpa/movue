@@ -1,5 +1,7 @@
-export async function getMovies (hash) {
+export async function getMovies(algorithm) {
     let result = {};
+
+    const hash = (window.location.hash.slice(1) ?? '/').replace('/', '')
 
     const type = {
         '': 'movie',
@@ -7,8 +9,13 @@ export async function getMovies (hash) {
         'tvshows': 'tv'
     }[hash]
 
+    const algo = {
+        'popular': 'popular',
+        'top rated': 'top_rated'
+    }[algorithm] ?? 'popular'
+
     await fetch(
-        `https://api.themoviedb.org/3/${ type }/popular?api_key=${ import.meta.env.VITE_API_TOKEN }&language=en-US&page=1`)
+        `https://api.themoviedb.org/3/${ type }/${ algo }?api_key=${ import.meta.env.VITE_API_TOKEN }&language=en-US&page=1`)
         .then(response => response.json())
         .then(response => result = response)
         .catch(err => console.error(err))

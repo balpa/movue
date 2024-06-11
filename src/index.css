@@ -67,6 +67,11 @@ button:focus-visible {
   border-radius: 15px;
 }
 
+.active {
+  background-color: #032541 !important;
+  color: white !important;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
