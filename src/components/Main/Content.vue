@@ -2,12 +2,11 @@
     import { ref, watch } from 'vue'
     import { getMovies } from '../../functions/fetchData.js'
     import MoviePoster from '../Content/MoviePoster.vue'
+    import SearchBar from '../Content/SearchBar.vue'
 
     const { welcomeText, welcomeSubText, searchBarInputPlaceholder, searchButtonText } = {
         welcomeText: 'Welcome.',
         welcomeSubText: 'Millions of movies, TV shows and people to discover. Explore now.',
-        searchBarInputPlaceholder: 'Search for a movie, tv show, person...',
-        searchButtonText: 'Search',
     };
 
     const currentPath = ref(window.location.hash);
@@ -50,8 +49,7 @@
             <h4 class="welcome-sub-text text-3xl font-bold text-white">{{ welcomeSubText }}</h4>
         </div>
         <div class="search-bar-wrapper w-11/12 flex relative">
-            <input class="shadow appearance-none rounded-3xl w-full h-[46px] bg-white py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" :placeholder="searchBarInputPlaceholder">
-            <button class="w-[100px] h-[46px] rounded-3xl absolute right-0 focus:outline-none bg-gradient-to-r from-[rgba(30,213,169,1)] to-[rgba(1,180,228,1)] hover:border-none hover:text-black transition duration-500">{{ searchButtonText }}</button>
+            <SearchBar />
         </div>
     </div>
     <div class="oscar-wrapper"></div>
