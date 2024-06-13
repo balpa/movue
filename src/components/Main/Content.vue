@@ -17,6 +17,8 @@
     const popularButtonActive = ref(true);
     const topRatedButtonActive = ref(false);
 
+    const currentType = currentPath.value ? (currentPath.value.slice(1) ?? '/').replace('/', '') : 'movies';
+
     window.addEventListener('hashchange', () => currentPath.value = window.location.hash);
 
     watch(() => (currentPath.value.slice(1) ?? '/').replace('/', ''), fetchData, { immediate: true });
@@ -51,10 +53,10 @@
         <div class="search-bar-wrapper w-11/12 flex relative">
             <SearchBar />
         </div>
-    </div>
+    </div>  
     <div class="oscar-wrapper"></div>
     <div class="posters-algorithm-wrapper flex max-w-[1280px] m-auto text-black p-[10px] gap-[20px] items-center">
-        <div class="posters-algorithm-text text-[24px] font-bold">Popular</div>
+        <div class="posters-algorithm-text text-[24px] font-bold">{{ algorithm }} {{ currentType }}</div>
         <div class="poster-algorihtm-options flex gap-[10px]">
             <div @click="setSelectedAlgorithm" :class="{ 'active': popularButtonActive }" class="poster-algorithm-option pt-[4px] pb-[4px] pl-[15px] pr-[15px] rounded-2xl text-black bg-white border border-black hover:cursor-pointer">popular</div>
             <div @click="setSelectedAlgorithm" :class="{ 'active': topRatedButtonActive }" class="poster-algorithm-option pt-[4px] pb-[4px] pl-[15px] pr-[15px] rounded-2xl text-black bg-white border border-black hover:cursor-pointer">top rated</div>
