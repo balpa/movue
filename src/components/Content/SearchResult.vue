@@ -3,8 +3,6 @@
 
     const props = defineProps(['searchedItem']);
     const { id, name } = props.searchedItem;
-
-    console.log(name)
 </script>
 
 <template>
