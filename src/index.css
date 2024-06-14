@@ -72,6 +72,10 @@ button:focus-visible {
   color: white !important;
 }
 
+.favorited {
+  color: yellow !important;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

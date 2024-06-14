@@ -1,10 +1,12 @@
 <script setup>
-    import { ref, onMounted } from 'vue';
+    import { ref, onMounted, watch } from 'vue';
+    import { usePosterStore } from '../../stores/posterStore.js';
 
+    const posterStore = usePosterStore();
     const props = defineProps(['poster']);
 
     const {
-        poster_path, vote_average, release_date, first_air_date, original_title, name
+        poster_path, vote_average, release_date, first_air_date, original_title, name, id
     } = props.poster;
 
     const imagePrefix = 'https://image.tmdb.org/t/p/w220_and_h330_face';
@@ -17,9 +19,14 @@
 
     const canvasElement = ref();
     const context = ref();
+    const isCurrentPosterFavorited = ref(false);
+
+    watch(() => isCurrentPosterFavorited.value, () => {
+        isCurrentPosterFavorited.value = checkIsFavorited();
+    }, { immediate: true });
 
     onMounted(() => {
-        context.value = canvasElement.value?.getContext('2d') ?? undefined;
+        context.value = canvasElement.value?.getContext('2d');
 
         render();
     });
@@ -51,11 +58,27 @@
 
         return `${month} ${day}, ${year}`;
     }
+
+    function addToFavorites() {
+        if (!checkIsFavorited()) {
+            posterStore.addItems(id);
+        } else {
+            posterStore.removeItems(id);
+        }
+
+        isCurrentPosterFavorited.value = checkIsFavorited();
+    }
+
+    function checkIsFavorited() {
+        const favoritedPosters = posterStore.getItems;
+
+        return favoritedPosters.includes(id);
+    }
 </script>
 
 <template>
     <div class="poster-wrapper text-black min-w-[150px] font-sans text-left mb-[50px]">
-        <div class="poster-content">
+        <div class="poster-content relative">
             <img class="w-[150px] h-[225px] rounded-lg mb-[25px]" :src="posterURL"/>
             <div fillColor="red" class="vote-percentage mt-[-40px] relative w-[38px] h-[38px] bg-[#081c22] rounded-[50%] text-white flex justify-center items-center">
                 <span class="text-[13px] font-bold">{{ voteAverage }}</span>
@@ -64,6 +87,7 @@
             </div>
             <div class="poster-title text-base font-bold">{{ title }}</div>
             <div class="poster-release-date">{{ formattedDate }}</div>
+            <div @click="addToFavorites"  :class="{ 'favorited': isCurrentPosterFavorited }" class="poster-star text-[24px] absolute top-0 right-[5px] text-white cursor-pointer">&#9733;</div>
         </div>
     </div>
 </template>
