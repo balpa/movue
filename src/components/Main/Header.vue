@@ -14,14 +14,6 @@
             name: 'TV Shows',
             url: '#/tvshows'
         },
-        {
-            name: 'People',
-            url: '#/movies'
-        },
-        {
-            name: 'More',
-            url: '#/tvshows'
-        }
     ]);
 
     const { headerIconURL } = config;

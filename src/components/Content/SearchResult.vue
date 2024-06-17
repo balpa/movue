@@ -3,6 +3,17 @@
 
     const props = defineProps(['searchedItem']);
     const { id, name } = props.searchedItem;
+
+    async function search() {
+        let result = {};
+
+        await fetch(`https://api.themoviedb.org/3/find/${ id }?&api_key=${ import.meta.env.VITE_API_TOKEN }`)
+            .then(response => response.json())
+            .then(response => result = response)
+            .catch(err => console.error(err))
+
+        console.log(result);
+    }
 </script>
 
 <template>
