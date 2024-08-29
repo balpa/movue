@@ -78,7 +78,7 @@
 
 <template>
     <div class="poster-wrapper text-black min-w-[150px] font-sans text-left mb-[50px]">
-        <div class="poster-content relative">
+        <div class="poster-content relative w-[150px]">
             <img class="w-[150px] h-[225px] rounded-lg mb-[25px]" :src="posterURL"/>
             <div fillColor="red" class="vote-percentage mt-[-40px] relative w-[38px] h-[38px] bg-[#081c22] rounded-[50%] text-white flex justify-center items-center">
                 <span class="text-[13px] font-bold">{{ voteAverage }}</span>

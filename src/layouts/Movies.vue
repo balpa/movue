@@ -1,5 +1,5 @@
 <script setup>
-    import { ref, watch } from 'vue'
+    import { ref, onMounted } from 'vue'
     import { getMovieByTypeAndAlgorithm } from '../functions/fetchData.js'
     import MoviePoster from '../components/Content/MoviePoster.vue'
     import Header from '../components/Main/Header.vue'
@@ -8,11 +8,11 @@
     const movies = ref(null);
     const error = ref(null);
 
-    window.addEventListener('hashchange', () => {
-        fetchData()
-    })
+    window.addEventListener('hashchange', () => fetchData())
 
-    async function fetchData () {
+    onMounted(() => fetchData());
+
+    async function fetchData() {
         const url = window.location.href;
         const params = url.split('/').slice(4);
         const movieType = params[0];
@@ -23,6 +23,8 @@
 
         try {
             movies.value = await getMovieByTypeAndAlgorithm(movieType, algorithm);
+
+            console.log(movies.value)
         } catch (err) {
             error.value = err.toString();
         } finally {
@@ -32,8 +34,13 @@
 </script>
 
 <template>
-    <div class="bg-white w-screen h-screen">
+    <div class="bg-white w-screen min-h-screen">
         <Header />
-        <MoviePoster v-for="poster in movies?.results" :key="poster.id" :poster="poster"/>
+        <div class="flex w-full h-full">
+            <div class="w-[200px] bg-red-500 min-h-screen"></div>
+            <div class="w-[100%] h-full flex flex-wrap gap-[25px] p-[30px]">
+                <MoviePoster v-for="poster in movies?.results" :key="poster.id" :poster="poster"/>
+            </div>
+        </div>
     </div>
 </template>
