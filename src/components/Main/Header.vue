@@ -32,13 +32,15 @@ watch(() => dropdownStatus.value, () => {
   }
 }, { immediate: true });
 
+const redirectHomePage = () => window.location.href = '/';
+
 const { headerIconURL } = config;
 </script>
 
 <template>  
   <div class="header w-screen m-auto h-16 bg-[#032541] flex">
     <div class="header-left flex gap-5 items-center justify-center w-6/12 h-full">
-      <img class="img h-5" :src="headerIconURL" />
+      <img class="img h-5 cursor-pointer" :src="headerIconURL" @click="redirectHomePage" />
       <ul class="menu-item-wrapper flex gap-5" v-for="(item, index) in menuItems" :key="index">
         <li>
           <a

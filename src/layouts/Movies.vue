@@ -4,31 +4,31 @@
     import MoviePoster from '../components/Content/MoviePoster.vue'
     import Header from '../components/Main/Header.vue'
 
-    const url = window.location.href;
-    const params = ref(url.split('/').slice(4));
     const loading = ref(false);
     const movies = ref(null);
     const error = ref(null);
 
-    watch(() => params.value, fetchData, { immediate: true });
+    window.addEventListener('hashchange', () => {
+        fetchData()
+    })
 
-    async function fetchData (parameters) {
-        const movieType = parameters[0];
-        const algorithm = parameters[1];
+    async function fetchData () {
+        const url = window.location.href;
+        const params = url.split('/').slice(4);
+        const movieType = params[0];
+        const algorithm = params[1];
 
         error.value = movies.value = null;
         loading.value = true;
 
         try {
             movies.value = await getMovieByTypeAndAlgorithm(movieType, algorithm);
-            console.log(movies.value)
         } catch (err) {
             error.value = err.toString();
         } finally {
             loading.value = false;
         }
     }
-    
 </script>
 
 <template>

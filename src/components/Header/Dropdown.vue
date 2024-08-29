@@ -23,7 +23,7 @@
 </script>
 
 <template>  
-    <div class="p-[20px] bg-white rounded-xl drop-shadow-xl absolute flex flex-col gap-[10px]">
+    <div class="p-[20px] bg-white rounded-xl drop-shadow-xl absolute flex flex-col gap-[10px] z-50">
         <div v-for="(item, index) in config" :key="index" class="dropdown-item text-black cursor-pointer" @click="navigateUser($event)">
             {{ item }}
         </div>
