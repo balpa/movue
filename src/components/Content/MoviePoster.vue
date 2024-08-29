@@ -41,7 +41,7 @@
         ctx.beginPath();
         ctx.arc(19, 19, 16, 0, (2 * Math.PI) * (voteAverage / 100), false);
         ctx.lineWidth = 3;
-        ctx.strokeStyle = "yellow";
+        ctx.strokeStyle = voteAverage >= 70 ? "green" : "yellow";
         ctx.stroke();
     }
 

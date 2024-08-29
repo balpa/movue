@@ -23,6 +23,18 @@ export async function getMovies(algorithm) {
     return result;
 }
 
+export async function getMovieByTypeAndAlgorithm(type, algorithm) {
+    let result = {};
+
+    await fetch(
+        `https://api.themoviedb.org/3/${ type }/${ algorithm }?api_key=${ import.meta.env.VITE_API_TOKEN }&language=en-US&page=1`)
+        .then(response => response.json())
+        .then(response => result = response)
+        .catch(err => console.error(err))
+
+    return result;
+}
+
 export async function search(keyword) {
     let result = {};
 
