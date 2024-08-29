@@ -23,13 +23,15 @@
 
         try {
             movies.value = await getMovieByTypeAndAlgorithm(movieType, algorithm);
-
-            console.log(movies.value)
         } catch (err) {
             error.value = err.toString();
         } finally {
             loading.value = false;
         }
+    }
+
+    function sortByPopularity() {
+        movies.value.results = [...movies.value.results].sort((a, b) => b.popularity - a.popularity);
     }
 </script>
 
@@ -37,7 +39,9 @@
     <div class="bg-white w-screen min-h-screen">
         <Header />
         <div class="flex w-full h-full">
-            <div class="w-[200px] bg-red-500 min-h-screen"></div>
+            <div class="w-[200px] bg-red-500 min-h-screen">
+                <div @click="sortByPopularity">popularity desc test</div>
+            </div>
             <div class="w-[100%] h-full flex flex-wrap gap-[25px] p-[30px]">
                 <MoviePoster v-for="poster in movies?.results" :key="poster.id" :poster="poster"/>
             </div>

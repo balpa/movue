@@ -44,7 +44,7 @@ export async function getMovieByTypeAndAlgorithm(type, algorithm = 'popular') {
     }[decodeURI(algorithm)]
 
     await fetch(
-        `https://api.themoviedb.org/3/${ formattedType }/${ algo }?api_key=${ import.meta.env.VITE_API_TOKEN }&language=en-US&page=1`)
+        `https://api.themoviedb.org/3/${ formattedType }/${ algo }?api_key=${ import.meta.env.VITE_API_TOKEN }&language=en-US&page=1&with_genres=27`)
         .then(response => response.json())
         .then(response => result = response)
         .catch(err => console.error(err))
