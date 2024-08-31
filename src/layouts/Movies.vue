@@ -4,11 +4,40 @@
     import MoviePoster from '../components/Content/MoviePoster.vue'
     import Header from '../components/Main/Header.vue'
 
-    const options = ['rating descending', 'rating ascending', 'popularity ascending', 'popularity descending', 'title (a-z)']
+    const options = [
+        'rating descending',
+        'rating ascending',
+        'popularity ascending',
+        'popularity descending',
+        'title (a-z)'
+    ]
+    const genres = {
+        'action': 28,
+        'adventure': 12,
+        'animation': 16,
+        'comedy': 35,
+        'crime': 80,
+        'documentary': 99,
+        'drama': 18,
+        'family': 10751,
+        'fantasy': 14,
+        'history': 36,
+        'horror': 27,
+        'music': 10402,
+        'mystery': 9648,
+        'romance': 10749,
+        'science fiction': 878,
+        'tv movie': 10770,
+        'thriller': 53,
+        'war': 10752,
+        'western': 37,
+    }
 
+    const selectedGenres = ref([]);
     const selectedOption = ref(null);
     const loading = ref(false);
     const movies = ref(null);
+    const savedMovieData = ref(null);
     const error = ref(null);
 
     window.addEventListener('hashchange', () => fetchData())
@@ -27,7 +56,7 @@
         loading.value = true;
 
         try {
-            movies.value = await getMovieByTypeAndAlgorithm(movieType, algorithm);
+            movies.value = await getMovieByTypeAndAlgorithm(movieType, algorithm);;
         } catch (err) {
             error.value = err.toString();
         } finally {
@@ -56,6 +85,31 @@
                 break;
         }
     }
+
+    function toggleGenre(genre) {
+        if (selectedGenres.value.includes(genre)) {
+            selectedGenres.value = selectedGenres.value.filter(g => g !== genre);
+        } else {
+            selectedGenres.value.push(genre);
+        }
+
+        filterByGenre();
+    }
+
+    function filterByGenre() {
+        if (selectedGenres.value.length === 0) {
+            fetchData();
+        }
+
+        const selectedGenreIds = selectedGenres.value.map(genre => genres[genre]);
+        
+        if (movies.value) {
+            movies.value.results = movies.value?.results.filter(movie => {
+                    return movie.genre_ids.some(id => selectedGenreIds.includes(id))
+                }
+            );
+        }
+    }
 </script>
 
 <template>
@@ -72,8 +126,17 @@
                     </select>
                 </div>
                 <div class="filter-wrapper w-[90%] rounded border-black border-2 text-black bg-white p-[10px]">
-                    <div class="genres-wrapper">
-                        <div class="genres-title"></div>
+                    <div class="genres-title">Genres</div>
+                    <div class="genres-wrapper flex flex-wrap gap-[7px]">
+                        <div 
+                                v-for="(id, genre) in genres" 
+                                :key="id" 
+                                @click="toggleGenre(genre)" 
+                                :class="['genre-badge', selectedGenres.includes(genre) ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black']" 
+                                class="cursor-pointer rounded-full px-[5px]"
+                            >
+                                {{ genre }}
+                            </div>
                     </div>
                 </div>
             </div>
