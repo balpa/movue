@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "lodash": "^4.17.21",
     "lodash.debounce": "^4.0.8",
     "pinia": "^2.1.7",
     "popover-vue": "^0.0.5",

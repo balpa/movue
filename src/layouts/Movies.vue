@@ -3,6 +3,7 @@
     import { getMovieByTypeAndAlgorithm } from '../functions/fetchData.js'
     import MoviePoster from '../components/Content/MoviePoster.vue'
     import Header from '../components/Main/Header.vue'
+    import throttle from "lodash/throttle";
 
     const options = [
         'rating descending',
@@ -37,14 +38,15 @@
     const selectedOption = ref(null);
     const loading = ref(false);
     const movies = ref(null);
-    const savedMovieData = ref(null);
     const error = ref(null);
+    const userVoteCountFilter = ref(0)
 
     window.addEventListener('hashchange', () => fetchData())
 
     onMounted(() => fetchData());
 
     watch(selectedOption, sortMovies);
+    watch(userVoteCountFilter, throttle(() => filterByVotes(), 400));
 
     async function fetchData() {
         const url = window.location.href;
@@ -110,6 +112,12 @@
             );
         }
     }
+
+    function filterByVotes() {
+        if (movies.value) {
+            movies.value.results = movies.value?.results.filter(movie => movie.vote_count >= userVoteCountFilter.value);
+        }
+    }
 </script>
 
 <template>
@@ -129,15 +137,27 @@
                     <div class="genres-title">Genres</div>
                     <div class="genres-wrapper flex flex-wrap gap-[7px]">
                         <div 
-                                v-for="(id, genre) in genres" 
-                                :key="id" 
-                                @click="toggleGenre(genre)" 
-                                :class="['genre-badge', selectedGenres.includes(genre) ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black']" 
-                                class="cursor-pointer rounded-full px-[5px]"
-                            >
-                                {{ genre }}
-                            </div>
+                            v-for="(id, genre) in genres" 
+                            :key="id" 
+                            @click="toggleGenre(genre)" 
+                            :class="['genre-badge', selectedGenres.includes(genre) ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black']" 
+                            class="cursor-pointer rounded-full px-[5px]"
+                        >
+                            {{ genre }}
+                        </div>
                     </div>
+                </div>
+                <div class="range-inputs-wrapper w-[90%] rounded border-black border-2 text-black bg-white p-[10px]">
+                    <label for="user-votes">Minimum User Votes</label>
+                    <input
+                        type="range"
+                        id="user-votes"
+                        name="user-votes"
+                        min="0"
+                        max="500"
+                        v-model="userVoteCountFilter"
+                    >
+                    <div class="vote-count">{{ userVoteCountFilter }}</div>
                 </div>
             </div>
             <div class="w-[100%] h-full flex flex-wrap gap-[25px] p-[30px]">
