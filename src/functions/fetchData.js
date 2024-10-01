@@ -1,4 +1,5 @@
 export async function getMovies(algorithm) {
+    const test = "test";
     let result = {};
 
     const hash = (window.location.hash.slice(1) ?? '/').replace('/', '')
